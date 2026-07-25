@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>This one is for my Essie</title>
+
+<style type="text/css">
+@font-face {
+    font-family: digit;
+    src: url('digital-7_mono.ttf') format("truetype");
+}
+</style>
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="js/garden.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+
+</head>
+
+<body>
+
+<!-- Intro Gate Screen -->
+<div id="introScreen">
+    <div id="introHeartWrap">
+        <span id="introHeart" onclick="popHeart(event)">&#10084;&#65039;</span>
+        <div id="explosionContainer"></div>
+    </div>
+    <div id="introText">Tap the Heart to Continue</div>
+</div>
+
+<div id="mainDiv">
+    <div id="content">
+        <div id="code">
+            <span class="comments">/**</span><br />
+            <span class="space"/><span class="comments">*THE CODE OF LOVE</span><br />
+            <span class="space"/><span class="comments">*/</span><br />
+            Hey Essie,<br />
+            Looking back at where we started...<br />
+            <span class="comments">// From the very first spark to where we are now.</span><br />
+            You came into my life and completely shifted my perspective;<br />
+            <span class="comments">// Your gentle heart, your laugh, and how effortlessly you shine.</span><br />
+            Your presence got imprinted in my heart;<br />
+            As time moved forward,<br />
+            What we built grew deeper and stronger;<br />
+            A real journey from strangers to friends;<br />
+            We’ve traveled a long way together;<br />
+            We've had our rough patches and misunderstandings;<br />
+            <span class="comments">// And we both know life will bring a few more.</span><br />
+            But no matter what, we always find our way back, stronger than before;<br />
+            <br>
+            <br>
+            All I want you to know is this:<br />
+            Eeee, you make my world brighter just by being in it,<br />
+            And I'm locked in with you for the long run.<br />
+            <br>
+            <br>
+            <span id="heartspan">
+            <a href="javascript:void(0);" onclick="openLightbox(); return false;"><i class="fas fa-heart" id="icon"></i></a>
+            </span>
+        </div>
+        <div id="loveHeart">
+            <canvas id="garden"></canvas>
+            <div id="words">
+                <div id="messages">
+                    We've been friends for
+                    <div id="elapseClock"></div>
+                </div>
+                <div id="loveu">
+                    I LOVE YOU SO MUCH<br/>
+                    <div class="signature">- Mike</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal Overlay -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <span class="lightbox-arrow lightbox-prev" onclick="showPrevImage(event)">&#10094;</span>
+    <img class="lightbox-content" id="lightbox-img" src="images/photo1.jpg" alt="Enlarged view" onclick="event.stopPropagation();">
+    <span class="lightbox-arrow lightbox-next" onclick="showNextImage(event)">&#10095;</span>
+</div>
+
+<!-- Background Music -->
+<audio id="bgMusic" src="withyou.mp3" loop preload="auto"></audio>
+<div id="musicToggle" onclick="toggleMusic()"><i class="fas fa-music"></i></div>
+
+<script type="text/javascript">
+var offsetX = $("#loveHeart").width() / 2;
+var offsetY = $("#loveHeart").height() / 2 - 55;
+var together = new Date();
+together.setFullYear(2025, 1, 18);
+together.setHours(16);
+together.setMinutes(30);
+together.setSeconds(0);
+together.setMilliseconds(0);
+
+var bgMusic = document.getElementById("bgMusic");
+
+function updateMusicIcon() {
+    var $icon = $("#musicToggle i");
+    if (bgMusic.paused) {
+        $icon.removeClass("fa-music").addClass("fa-volume-mute");
+    } else {
+        $icon.removeClass("fa-volume-mute").addClass("fa-music");
+    }
+}
+
+function toggleMusic() {
+    if (bgMusic.paused) {
+        bgMusic.play();
+    } else {
+        bgMusic.pause();
+    }
+    updateMusicIcon();
+}
+
+function startExperience() {
+    if (!document.createElement('canvas').getContext) {
+        var msg = document.createElement("div");
+        msg.id = "errorMsg";
+        msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+        document.body.appendChild(msg);
+        $("#code").css("display", "none")
+        $("#copyright").css("position", "absolute");
+        $("#copyright").css("bottom", "10px");
+        document.execCommand("stop");
+    } else {
+        setTimeout(function () {
+            startHeartAnimation();
+        }, 5000);
+
+        timeElapse(together);
+        setInterval(function () {
+            timeElapse(together);
+        }, 500);
+
+        adjustCodePosition();
+        $("#code").typewriter();
+    }
+}
+
+function popHeart(e) {
+    if (e) e.stopPropagation();
+
+    // Start the music right inside the tap — this is a genuine user
+    // gesture, so browsers will allow unmuted playback here.
+    bgMusic.play();
+    updateMusicIcon();
+
+    // Burst the heart into little hearts
+    var container = document.getElementById('explosionContainer');
+    var count = 18;
+    for (var i = 0; i < count; i++) {
+        var mini = document.createElement('span');
+        mini.className = 'mini-heart';
+        mini.innerHTML = '&#10084;&#65039;';
+        var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.3);
+        var distance = 110 + Math.random() * 90;
+        var tx = Math.cos(angle) * distance;
+        var ty = Math.sin(angle) * distance;
+        mini.style.setProperty('--tx', tx + 'px');
+        mini.style.setProperty('--ty', ty + 'px');
+        mini.style.animationDelay = (Math.random() * 0.08) + 's';
+        container.appendChild(mini);
+    }
+
+    $("#introHeart").css({ "opacity": "0", "transform": "scale(1.5)" });
+
+    setTimeout(function () {
+        $("#introScreen").addClass("fade-out");
+        setTimeout(function () {
+            $("#introScreen").css("display", "none");
+            startExperience();
+        }, 600);
+    }, 700);
+}
+</script>
+</body>
+</html>
